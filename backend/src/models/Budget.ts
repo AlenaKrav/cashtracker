@@ -19,12 +19,12 @@ class Budget extends Model {
         type: DataType.STRING(100)
     })
     //propiedad de la propiedad del modelo en Typescript, y por tanto el nombre de la columna en postgres
-    name: string
+    declare name: string
 
     @Column({
         type: DataType.INTEGER()
     })
-    amount: number
+    declare amount: number
 }
 
 export default Budget
