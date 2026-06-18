@@ -1,7 +1,6 @@
 import type { Request, Response } from "express";
 import Budget from "../models/Budget";
 
-
 export class BudgetController {
   static getAllBudgets = async (req: Request, res: Response) => {
     try {

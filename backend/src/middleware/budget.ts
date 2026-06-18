@@ -68,7 +68,7 @@ export const validateBudgetInput = async (
     .notEmpty()
     .withMessage("El nombre no puede ir vacío")
     .run(req);
-    
+
   await body("amount")
     .notEmpty()
     .withMessage("La cantidad no puede ir vacía")
