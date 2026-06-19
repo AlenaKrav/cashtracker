@@ -66,17 +66,17 @@ export const validateBudgetInput = async (
 ) => {
   await body("name")
     .notEmpty()
-    .withMessage("El nombre no puede ir vacío")
+    .withMessage("El nombre de presupuesto no puede ir vacío")
     .run(req);
 
   await body("amount")
     .notEmpty()
-    .withMessage("La cantidad no puede ir vacía")
+    .withMessage("La cantidad de presupuesto no puede ir vacía")
     .isNumeric()
-    .withMessage("La cantidad debe ser un valor numérico")
+    .withMessage("La cantidad ce presupuesto debe ser un valor numérico")
     //evaluamos el valor de ese campo, el callback debe evaluarse en FALSE para ejecutarse
     .custom((value) => value > 0)
-    .withMessage("El valor numérico debe ser positivo")
+    .withMessage("El valor numérico de presupuesto debe ser positivo")
     .run(req);
   next();
 };
