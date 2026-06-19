@@ -1,6 +1,6 @@
 import type { Request, Response, NextFunction } from "express";
 import { body, param, validationResult } from "express-validator";
-import Expense from "../models/Expenses";
+import Expense from "../models/Expense";
 
 type ExpenseParams = {
   expenseId: string;
