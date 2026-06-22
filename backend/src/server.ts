@@ -22,6 +22,9 @@ const app = express();
 app.use(morgan("dev"));
 
 app.use(express.json());
+//si queremos limitar peticiones en toda la app app.use(limiter)
+
+
 
 app.use('/api/budgets', budgetRouter)
 app.use('/api/auth', authRouter)

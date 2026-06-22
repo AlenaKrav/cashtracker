@@ -2,8 +2,12 @@ import { Router } from "express";
 import { body, ExpressValidator } from "express-validator";
 import { AuthController } from "../controllers/AuthControllers";
 import { handleInputErrors } from "../middleware/validation";
+import { limiter } from "../config/rateLimiter";
 
 const router = Router();
+
+//para limitar las peticiones solo en ese router (solo las peticiones auth)
+// router.use(limiter)
 
 router.post('/create-account',
     body('name')
@@ -17,6 +21,7 @@ router.post('/create-account',
 
 
 router.post('/confirm-account',
+    limiter, //solo ponemos limite en este endpoint concreto
     body('token').notEmpty().isLength({min: 6, max: 6}).withMessage('Token no válido'),
     handleInputErrors,
     AuthController.confirmAccount
