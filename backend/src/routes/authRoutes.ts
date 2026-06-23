@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { body, ExpressValidator } from "express-validator";
+import { body, param, ExpressValidator } from "express-validator";
 import { AuthController } from "../controllers/AuthControllers";
 import { handleInputErrors } from "../middleware/validation";
 import { limiter } from "../config/rateLimiter";
@@ -46,5 +46,33 @@ router.post(
   AuthController.forgotPassword,
   handleInputErrors,
 );
+
+
+router.post(
+  "/validate-token",
+  body("token")
+    .notEmpty()
+    .isLength({ min: 6, max: 6 })
+    .withMessage("Token no válido"),
+    AuthController.validateToken,
+  handleInputErrors,
+);
+
+
+router.post(
+  "/reset-password/:token",
+  param("token").isLength({ min: 6, max: 6 }).withMessage("Token no válido"),
+  body("password")
+    .notEmpty()
+    .isLength({ min: 8 })
+    .withMessage("La contraseña debe tener mínimo 8 caracteres"),
+  handleInputErrors,
+  AuthController.resetPasswordWithToken,
+);
+
+
+router.get("/user",
+  AuthController.getUserInfo
+)
 
 export default router;

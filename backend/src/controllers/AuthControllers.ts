@@ -3,7 +3,8 @@ import User from "../models/User";
 import { hashPassword, verifyPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
 import { AuthEmail } from "../emails/AuthEmail";
-import { generateJWT } from "../utils/jwt";
+import { decodeJWT, generateJWT } from "../utils/jwt";
+import { JwtPayload } from "jsonwebtoken";
 
 export class AuthController {
   static createAccount = async (req: Request, res: Response) => {
@@ -103,12 +104,88 @@ export class AuthController {
 
     existingUser.token = generateToken();
     await existingUser.save();
-          // gestionamos el envio de mail
-      await AuthEmail.sendPasswordResetToken({
-        name: existingUser.name,
-        email: existingUser.email,
-        token: existingUser.token,
+    // gestionamos el envio de mail
+    await AuthEmail.sendPasswordResetToken({
+      name: existingUser.name,
+      email: existingUser.email,
+      token: existingUser.token,
+    });
+    res
+      .status(200)
+      .json({
+        message:
+          "Revisa tu email con las instrucciones para restablecer tu contraseña",
       });
-    res.status(200).json({ message: "Revisa tu email con las instrucciones para restablecer tu contraseña" });
   };
+
+  static validateToken = async (req: Request, res: Response) => {
+    const { token } = req.body;
+    const userWithToken = await User.findOne({
+      where: {
+        token,
+      },
+    });
+    if (!userWithToken) {
+      const error = new Error("Token no válido");
+      return res.status(401).json({ error: error.message });
+    }
+    res.json({ userWithToken });
+  };
+
+  static resetPasswordWithToken = async (req: Request, res: Response) => {
+    const { token } = req.params;
+    const { password } = req.body;
+
+    const userWithToken = await User.findOne({
+      where: {
+        token,
+      },
+    });
+    if (!userWithToken) {
+      const error = new Error("Token no existe en la BD");
+      return res.status(401).json({ error: error.message });
+    }
+
+    userWithToken.password = await hashPassword(password);
+    userWithToken.token = null;
+    userWithToken.save();
+
+    res
+      .status(200)
+      .json({
+        message:
+          "Contraseña actualizada con éxito",
+      });
+
+  }
+
+  static getUserInfo = async (req: Request, res: Response) => {
+    const bearer = req.headers.authorization;
+    if(!bearer) {
+      const error = new Error("Acceso no autorizado");
+      return res.status(401).json({ error: error.message });
+    }
+    const [texto, token] = bearer.split(' ');
+    if(!token) {
+      const error = new Error("Token no válido. Acceso no autorizado");
+      return res.status(401).json({ error: error.message });
+    }
+
+    try {
+      const decodedToken = decodeJWT(token);
+      if(typeof decodedToken === 'object' && decodedToken.id){
+          const existingUser = await User.findByPk(decodedToken.id, {attributes: ['id']});
+          if(!existingUser){
+            const error = new Error("Usuario no encontrado");
+            return res.status(404).json({ error: error.message });
+          }
+          res.json(existingUser)
+
+      }
+     
+      
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  }
 }
