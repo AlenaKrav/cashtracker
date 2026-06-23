@@ -27,7 +27,7 @@ export class AuthController {
       await user.save();
 
       // gestionamos el envio de mail
-      await AuthEmail.sendConfitmationEmail({
+      await AuthEmail.sendConfirmationEmail({
         name: user.name,
         email: user.email,
         token: user.token,
@@ -82,8 +82,33 @@ export class AuthController {
       const error = new Error("Password incorrecto");
       return res.status(401).json({ error: error.message });
     }
-    const token = generateJWT(existingUser.id)
-    res.json(token)
+    const token = generateJWT(existingUser.id);
+    res.json(token);
     res.status(200).json({ message: "Logueado correctamente" });
+  };
+
+  static forgotPassword = async (req: Request, res: Response) => {
+    const { email } = req.body;
+
+    const existingUser = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (!existingUser) {
+      const error = new Error("Usuario no encontrado");
+      return res.status(404).json({ error: error.message });
+    }
+
+    existingUser.token = generateToken();
+    await existingUser.save();
+          // gestionamos el envio de mail
+      await AuthEmail.sendPasswordResetToken({
+        name: existingUser.name,
+        email: existingUser.email,
+        token: existingUser.token,
+      });
+    res.status(200).json({ message: "Revisa tu email con las instrucciones para restablecer tu contraseña" });
   };
 }
