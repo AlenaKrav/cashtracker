@@ -3,6 +3,7 @@ import { body, param, ExpressValidator } from "express-validator";
 import { AuthController } from "../controllers/AuthControllers";
 import { handleInputErrors } from "../middleware/validation";
 import { limiter } from "../config/rateLimiter";
+import { autenticateUser } from "../middleware/auth";
 
 const router = Router();
 
@@ -72,6 +73,7 @@ router.post(
 
 
 router.get("/user",
+  autenticateUser,
   AuthController.getUserInfo
 )
 

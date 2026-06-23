@@ -3,8 +3,7 @@ import User from "../models/User";
 import { hashPassword, verifyPassword } from "../utils/auth";
 import { generateToken } from "../utils/token";
 import { AuthEmail } from "../emails/AuthEmail";
-import { decodeJWT, generateJWT } from "../utils/jwt";
-import { JwtPayload } from "jsonwebtoken";
+import { generateJWT } from "../utils/jwt";
 
 export class AuthController {
   static createAccount = async (req: Request, res: Response) => {
@@ -160,32 +159,7 @@ export class AuthController {
   }
 
   static getUserInfo = async (req: Request, res: Response) => {
-    const bearer = req.headers.authorization;
-    if(!bearer) {
-      const error = new Error("Acceso no autorizado");
-      return res.status(401).json({ error: error.message });
-    }
-    const [texto, token] = bearer.split(' ');
-    if(!token) {
-      const error = new Error("Token no válido. Acceso no autorizado");
-      return res.status(401).json({ error: error.message });
-    }
-
-    try {
-      const decodedToken = decodeJWT(token);
-      if(typeof decodedToken === 'object' && decodedToken.id){
-          const existingUser = await User.findByPk(decodedToken.id, {attributes: ['id']});
-          if(!existingUser){
-            const error = new Error("Usuario no encontrado");
-            return res.status(404).json({ error: error.message });
-          }
-          res.json(existingUser)
-
-      }
-     
-      
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
+      const exisitingUser = req.user
+      res.json(exisitingUser)
   }
 }
