@@ -1,15 +1,20 @@
 import { Router } from "express";
 import { BudgetController } from "../controllers/BudgetController";
 import { handleInputErrors } from "../middleware/validation";
-import { validateBudgetExists, validateBudgetId, validateBudgetInput } from "../middleware/budget";
+import { validateBudgetExists, validateBudgetId, validateBudgetInput, validateBudgetOwner } from "../middleware/budget";
 import { ExpensesController } from "../controllers/ExpensesController";
 import { validateExpenseExists, validateExpenseId, validateExpensetInput } from "../middleware/expenses";
+import { autenticateUser } from "../middleware/auth";
 
 const router = Router();
+router.use(autenticateUser) //1. Autentica el user y genera req.user
 /** Budget Routes */
 //indicamos que cada vez nos viene un parametro id se jecuten estos dos middlewares
-router.param('budgetId', validateBudgetId);
-router.param('budgetId', validateBudgetExists);
+//OJO CON EL ORDEN
+router.param('budgetId', validateBudgetId); //2. validación del param del request
+router.param('budgetId', validateBudgetExists); // 3. verifica si existe el presupuesto con el id y genera req.budget
+router.param('budgetId', validateBudgetOwner); // 4. Aqui necesitaremos tanto el req.user como el req.budget
+
 
 
 router.param('expenseId', validateExpenseId)

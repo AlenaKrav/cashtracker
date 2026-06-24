@@ -80,3 +80,17 @@ export const validateBudgetInput = async (
     .run(req);
   next();
 };
+
+
+export function validateBudgetOwner (
+  req: Request<BudgetParams>,
+  res: Response,
+  next: NextFunction,
+) {
+  if(req.budget.userId !== req.user.id) {
+    return res
+        .status(401)
+        .json({ error: "No tienes permisos para ver este presupuesto" });
+  }
+  next()
+}
