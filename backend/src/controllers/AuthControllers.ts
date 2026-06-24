@@ -109,12 +109,10 @@ export class AuthController {
       email: existingUser.email,
       token: existingUser.token,
     });
-    res
-      .status(200)
-      .json({
-        message:
-          "Revisa tu email con las instrucciones para restablecer tu contraseña",
-      });
+    res.status(200).json({
+      message:
+        "Revisa tu email con las instrucciones para restablecer tu contraseña",
+    });
   };
 
   static validateToken = async (req: Request, res: Response) => {
@@ -149,17 +147,52 @@ export class AuthController {
     userWithToken.token = null;
     userWithToken.save();
 
-    res
-      .status(200)
-      .json({
-        message:
-          "Contraseña actualizada con éxito",
-      });
-
-  }
+    res.status(200).json({
+      message: "Contraseña actualizada con éxito",
+    });
+  };
 
   static getUserInfo = async (req: Request, res: Response) => {
-      const exisitingUser = req.user
-      res.json(exisitingUser)
-  }
+    const exisitingUser = req.user;
+    res.json(exisitingUser);
+  };
+
+  static updateCurrentUserPassword = async (req: Request, res: Response) => {
+    const { currentPassword, newPassword } = req.body;
+    const currentUser = await User.findByPk(req.user.id);
+    const userBdPassword = currentUser.password;
+
+    const isCurrentPasswordCorrect = await verifyPassword(
+      currentPassword,
+      userBdPassword,
+    );
+
+    if (!isCurrentPasswordCorrect) {
+      const error = new Error("Contraseña actual es incorrecta");
+      return res.status(401).json({ error: error.message });
+    }
+
+    currentUser.password = await hashPassword(newPassword);
+    currentUser.save();
+    res.status(201).json({ message: "Contraseña actualizada con éxito" });
+  };
+
+  static checkPassword = async (req: Request, res: Response) => {
+    const { password } = req.body;
+    const currentUser = await User.findByPk(req.user.id);
+    const userBdPassword = currentUser.password;
+
+    const isCurrentPasswordCorrect = await verifyPassword(
+      password,
+      userBdPassword,
+    );
+
+    if (!isCurrentPasswordCorrect) {
+      const error = new Error(
+        "Contraseña actual es incorrecta. Vuelve a intentar",
+      );
+      return res.status(401).json({ error: error.message });
+    }
+    res.status(200).json({ message: "Contraseña correcta" });
+  };
 }

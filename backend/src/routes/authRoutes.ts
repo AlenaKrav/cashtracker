@@ -77,4 +77,27 @@ router.get("/user",
   AuthController.getUserInfo
 )
 
+router.post("/update-password",
+  autenticateUser,
+  body("currentPassword")
+    .notEmpty()
+    .withMessage("La contraseña no puede ir vacía"),
+  body("newPassword")
+    .notEmpty()
+    .isLength({ min: 8 })
+    .withMessage("La contraseña nueva debe tener mínimo 8 caracteres"),
+    handleInputErrors,
+    AuthController.updateCurrentUserPassword
+)
+
+//endpoint generico para que el user introduzca su password (ej: eliminar un presupuesto etc)
+router.post("/check-password",
+  autenticateUser,
+  body("password")
+    .notEmpty()
+    .withMessage("La contraseña no puede ir vacía"),
+    handleInputErrors,
+    AuthController.checkPassword
+)
+
 export default router;
