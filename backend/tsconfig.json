@@ -1,11 +1,13 @@
 {
     "compilerOptions": {
+        "types": ["node", "jest"],
         "outDir": "./dist",
         "rootDir": "./src",
         "lib": ["esnext"],
         "target": "ESNext",
         "moduleResolution": "NodeNext",
         "module": "NodeNext",
+        "isolatedModules": true,
         "strict": false,
         "sourceMap": true,
         "esModuleInterop": true,
