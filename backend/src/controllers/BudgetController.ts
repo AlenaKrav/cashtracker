@@ -25,7 +25,8 @@ export class BudgetController {
     try {
       const userId = req.user.id
       //creamos un modelo en memoria, un objeto = fila, es como preparar el INSERT antes de lanzar la quert
-      const budget = new Budget(req.body);
+      // const budget = new Budget(req.body); SUSTITUIDO POR 
+      const budget = await Budget.create(req.body);
       budget.userId = userId;
       // console.log(budget);
       //almacenamos el modelo en memoria en la BD
