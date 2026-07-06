@@ -3,13 +3,15 @@ import { budgets } from "../mocks/budgets";
 //Importan el controlador que vas a probar y el modelo que vas a simular
 import { BudgetController } from "../../controllers/BudgetController";
 import Budget from "../../models/Budget";
+import Expense from "../../models/Expense";
 
 //"no uses el modelo real de Budget, usa un fake"
 jest.mock("../../models/Budget", () => ({
   //crea una función simulada, porque no queremos que el test acceda a la BD real. Quieres controlar exactamente qué devuelve
   //ESTA ES UN FUNCION DE MODELO
   findAll: jest.fn(),
-  create: jest.fn()
+  create: jest.fn(),
+  findByPk: jest.fn(),
 }));
 
 describe("BudgetController.getAll", () => {
@@ -20,11 +22,11 @@ describe("BudgetController.getAll", () => {
     //ejecutamos nuestra implementacion de la funcion del modelo, reemplazamos la real por la nuestra
     // es decir cuando el controlador ejecute Budget.findAll se ejecutará esta funcion moqueda
     (Budget.findAll as jest.Mock).mockImplementation((options) => {
-        const updatedBudgets = budgets.filter(
-          (budget) => budget.userId === options.where.userId,
-        );
-        return Promise.resolve(updatedBudgets);
-      });
+      const updatedBudgets = budgets.filter(
+        (budget) => budget.userId === options.where.userId,
+      );
+      return Promise.resolve(updatedBudgets);
+    });
   });
 
   it("Should retrieve 2 budgets for user with ID 1", async () => {
@@ -80,33 +82,34 @@ describe("BudgetController.getAll", () => {
     });
     const response = createResponse();
     //fuerza el error, al ejecuta el controlador se va directo al catch
-    (Budget.findAll as jest.Mock).mockRejectedValue(new Error) //rechazamos la promesa con error
+    (Budget.findAll as jest.Mock).mockRejectedValue(new Error()); //rechazamos la promesa con error
     await BudgetController.getAllBudgets(request, response);
     expect(response.statusCode).toBe(500);
-    expect(response._getJSONData()).toEqual({ error: "Ha ocurrido un error al obtener los presupuestos" })
-
+    expect(response._getJSONData()).toEqual({
+      error: "Ha ocurrido un error al obtener los presupuestos",
+    });
   });
 });
 
 //Pruebas para crear un presupuesto
 describe("BudgetController.create", () => {
-  it('Should create a new budget and respond with 201', async() => {
+  it("Should create a new budget and respond with 201", async () => {
     //creamos un mock de budget para el guardado
     //en nuestro controlador cuando hacemos Budget.create (create es un metodo estatico de la clase)
     //este nos devuelve un objeto guardado budget, con ESTA NUEVA INSTANCIA CON LA QUE HACEMOS .save()
     //para simularlo aqui, se crea un objeto nuevo como el que devuelve create que lleva un metodo save
     //esta funcion se resuelve en true que el controlador al testearlo disponga de algo como .save() que al resolverse a true simula guardado correcto en la bd
     const mockBudget = {
-      save: jest.fn().mockResolvedValue(true)
+      save: jest.fn().mockResolvedValue(true),
     };
 
-    (Budget.create as jest.Mock).mockResolvedValue(mockBudget)
+    (Budget.create as jest.Mock).mockResolvedValue(mockBudget);
 
     const request = createRequest({
       method: "POST",
       url: "/api/1",
       user: { id: 1 },
-      body: {name: "Presupuesto prueba", amount: 100}
+      body: { name: "Presupuesto prueba", amount: 100 },
     });
     const response = createResponse();
     await BudgetController.createBudget(request, response);
@@ -117,31 +120,116 @@ describe("BudgetController.create", () => {
     expect(mockBudget.save).toHaveBeenCalled();
     expect(mockBudget.save).toHaveBeenCalledTimes(1);
     expect(Budget.create).toHaveBeenNthCalledWith(1, request.body);
-  })
+  });
 
   //TEST PARA EL CATCH DE CREATE A BUDGET
   it("Should handle errors when creating a budget", async () => {
-      const mockBudget = {
-      save: jest.fn() //aqui solo creamos este metodo para decir que existe
+    const mockBudget = {
+      save: jest.fn(), //aqui solo creamos este metodo para decir que existe
     };
 
     const request = createRequest({
       method: "POST",
       url: "/api/budgets",
       user: { id: 100 },
-      body: {name: "Presupuesto prueba", amount: 100},
+      body: { name: "Presupuesto prueba", amount: 100 },
     });
 
-    (Budget.create as jest.Mock).mockRejectedValue(new Error);
+    (Budget.create as jest.Mock).mockRejectedValue(new Error());
 
     const response = createResponse();
     await BudgetController.createBudget(request, response);
-    const data = response._getJSONData(); 
+    const data = response._getJSONData();
 
     expect(response.statusCode).toBe(500);
-    expect(data).toEqual({ error: "Ha ocurrido un error al crear el presupuesto" });
+    expect(data).toEqual({
+      error: "Ha ocurrido un error al crear el presupuesto",
+    });
     expect(mockBudget.save).not.toHaveBeenCalled();
     expect(Budget.create).toHaveBeenNthCalledWith(1, request.body);
+  });
+});
+
+describe("BudgetController.getBudgetById", () => {
+  beforeEach(() => {
+    (Budget.findByPk as jest.Mock).mockImplementation((id) => {
+      const budget = budgets.filter((b) => b.id === id)[0]; //como filter nos devuelve un array, pero nosotros necesitamos un objeto, decimos que coja el objeto en la 1 posicion
+      return Promise.resolve(budget);
+    });
+  });
+
+  it("should return a budget with ID 1 and its 3 expenses ", async () => {
+    const request = createRequest({
+      method: "POST",
+      url: "/api/budgets/:id",
+      budget: { id: 1 },
+    });
+
+    const response = createResponse();
+    await BudgetController.getBudgetById(request, response);
+    const data = response._getJSONData();
+
+    expect(response.statusCode).toBe(200);
+    expect(data.expenses).toHaveLength(3);
+    expect(Budget.findByPk).toHaveBeenCalledTimes(1);
+    expect(Budget.findByPk).toHaveBeenNthCalledWith(1, request.budget.id, {
+      include: [Expense],
+    });
+  });
+});
+
+describe("BudgetController.updateBudgetById", () => {
+  it("should update a budget and return a success message", async () => {
+    //mockBudget simula una instancia de Budget que ya ha sido recuperada de la base de datos
+    //y que el middleware ha colocado en req.budget
+    // req.budget === mockBudget
+    const mockBudget = {
+      //la promesa se resuelve correctamente, simulando que la actualización en la base de datos ha sido exitosa.
+      update: jest.fn().mockResolvedValue(true),
+    };
+
+    const request = createRequest({
+      method: "PUT",
+      url: "/api/budgets/:id",
+      budget: mockBudget,
+      body: { name: "Presupuesto prueba actualizado", amount: 100 },
+    });
+
+    const response = createResponse();
+    await BudgetController.updateBudgetById(request, response);
+    const data = response._getJSONData();
+
+
+    expect(response.statusCode).toBe(200);
+    expect(data).toEqual({ message: "Regsitro actualizado correctamente" });
+    expect(mockBudget.update).toHaveBeenCalled();
+    expect(mockBudget.update).toHaveBeenCalledTimes(1);
+    expect(mockBudget.update).toHaveBeenNthCalledWith(1, request.body);
+  });
+});
+
+describe("BudgetController.deleteBudget", () => {
+  it("should delete a budget with ID 1 and return a success message", async () => {
+    const mockBudget = {
+      destroy: jest.fn().mockResolvedValue(true),
+    };
+
+    const request = createRequest({
+      method: "DELETE",
+      url: "/api/budgets/:id",
+      budget: mockBudget,
+    });
+
+    const response = createResponse();
+    await BudgetController.deleteBudget(request, response);
+    const data = response._getJSONData();
+
+
+    expect(response.statusCode).toBe(200);
+    expect(data).toEqual({ message: "Regsitro borrado correctamente" });
+    expect(mockBudget.destroy).toHaveBeenCalled();
+    expect(mockBudget.destroy).toHaveBeenCalledTimes(1);
+
 
   });
-})
+});

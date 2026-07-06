@@ -52,7 +52,7 @@ export class BudgetController {
   static updateBudgetById = async (req: Request, res: Response) => {
     await req.budget.update(req.body);
     res
-      .status(201)
+      .status(200)
       .json({ message: "Regsitro actualizado correctamente" });
   };
 
