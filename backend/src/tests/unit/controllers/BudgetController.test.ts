@@ -107,7 +107,7 @@ describe("BudgetController.create", () => {
 
     const request = createRequest({
       method: "POST",
-      url: "/api/1",
+      url: "/api/budgets",
       user: { id: 1 },
       body: { name: "Presupuesto prueba", amount: 100 },
     });
