@@ -1,12 +1,12 @@
 import { createRequest, createResponse } from "node-mocks-http";
-import { budgets } from "../mocks/budgets";
+import { budgets } from "../../mocks/budgets";
 //Importan el controlador que vas a probar y el modelo que vas a simular
-import { BudgetController } from "../../controllers/BudgetController";
-import Budget from "../../models/Budget";
-import Expense from "../../models/Expense";
+import { BudgetController } from "../../../controllers/BudgetController";
+import Budget from "../../../models/Budget";
+import Expense from "../../../models/Expense";
 
 //"no uses el modelo real de Budget, usa un fake"
-jest.mock("../../models/Budget", () => ({
+jest.mock("../../../models/Budget", () => ({
   //crea una función simulada, porque no queremos que el test acceda a la BD real. Quieres controlar exactamente qué devuelve
   //ESTA ES UN FUNCION DE MODELO
   findAll: jest.fn(),

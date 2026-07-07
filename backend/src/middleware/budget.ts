@@ -2,7 +2,7 @@ import type { Request, Response, NextFunction } from "express";
 import { body, param, validationResult } from "express-validator";
 import Budget from "../models/Budget";
 
-type BudgetParams = {
+export type BudgetParams = {
   budgetId: string;
 };
 
@@ -34,7 +34,6 @@ export const validateBudgetId = async (
   next();
 };
 
-//NO ESTOY MUY DE ACUERDO QUE ESTO DEBERIA APARECER COMO MIDDLEWARE
 export const validateBudgetExists = async (
   req: Request<BudgetParams>,
   res: Response,
@@ -83,7 +82,7 @@ export const validateBudgetInput = async (
 
 
 export function validateBudgetOwner (
-  req: Request<BudgetParams>,
+  req: Request,
   res: Response,
   next: NextFunction,
 ) {
