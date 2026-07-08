@@ -21,7 +21,7 @@ export class AuthController {
     try {
       //creamos un user en memoria antes de guardarlo en la bd
       //estamos montando una futura fila de la tabla y luego se modifica el passw, se genera el token
-      const user = new User(req.body);
+      const user = await User.create(req.body);
       user.password = await hashPassword(password);
       user.token = generateToken();
       await user.save();
