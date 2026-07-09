@@ -83,8 +83,10 @@ export class AuthController {
       return res.status(401).json({ error: error.message });
     }
     const token = generateJWT(existingUser.id);
-    res.json(token);
-    res.status(200).json({ message: "Logueado correctamente" });
+    return res.status(200).json({
+      message: "Logueado correctamente",
+      token,
+    });
   };
 
   static forgotPassword = async (req: Request, res: Response) => {
