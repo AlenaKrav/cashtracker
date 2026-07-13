@@ -8,4 +8,6 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
+  detectOpenHandles: true,
+  openHandlesTimeout: 10 * 1000
 };

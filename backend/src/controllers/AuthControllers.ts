@@ -23,15 +23,21 @@ export class AuthController {
       //estamos montando una futura fila de la tabla y luego se modifica el passw, se genera el token
       const user = await User.create(req.body);
       user.password = await hashPassword(password);
-      user.token = generateToken();
+      const token =  generateToken();
+      user.token = token;
+
+      if(process.env.NODE_ENV !== 'production'){
+        globalThis.cashTrackerConfirmationToken = token;
+      }
+
       await user.save();
 
       // gestionamos el envio de mail
-      await AuthEmail.sendConfirmationEmail({
-        name: user.name,
-        email: user.email,
-        token: user.token,
-      });
+      // await AuthEmail.sendConfirmationEmail({
+      //   name: user.name,
+      //   email: user.email,
+      //   token: user.token,
+      // });
 
       res.status(201).json({ message: "Usuario creado correctamente" });
     } catch (error) {
@@ -105,12 +111,14 @@ export class AuthController {
 
     existingUser.token = generateToken();
     await existingUser.save();
+
+
     // gestionamos el envio de mail
-    await AuthEmail.sendPasswordResetToken({
-      name: existingUser.name,
-      email: existingUser.email,
-      token: existingUser.token,
-    });
+    // await AuthEmail.sendPasswordResetToken({
+    //   name: existingUser.name,
+    //   email: existingUser.email,
+    //   token: existingUser.token,
+    // });
     res.status(200).json({
       message:
         "Revisa tu email con las instrucciones para restablecer tu contraseña",

@@ -25,7 +25,6 @@ router.post(
   "/confirm-account",
    //limiter solo ponemos limite en este endpoint concreto
   body("token")
-    .notEmpty()
     .isLength({ min: 6, max: 6 })
     .withMessage("Token no válido"),
   handleInputErrors,

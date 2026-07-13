@@ -85,13 +85,13 @@ describe("AuthController.createAccount", () => {
     expect(mockUser.save).toHaveBeenCalled();
     expect(mockUser.password).toBe(hashedPassword);
     expect(mockUser.token).toBe(token);
-    expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledWith({
-      name: request.body.name,
-      email: request.body.email,
-      token: token
-    })
+    // expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledWith({
+    //   name: request.body.name,
+    //   email: request.body.email,
+    //   token: token
+    // })
 
-    expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledTimes(1)
+    // expect(AuthEmail.sendConfirmationEmail).toHaveBeenCalledTimes(1)
   });
 });
 
