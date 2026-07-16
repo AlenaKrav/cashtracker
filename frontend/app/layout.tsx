@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
-import {Inter} from "next/font/google";
+import {Outfit} from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({subsets:['latin']})
+const outfit = Outfit({subsets:['latin']})
 
 export const metadata: Metadata = {
   title: "CashTracker",
@@ -17,9 +17,8 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={inter.className}
+        className={outfit.className}
       >
-        <h1>Estás en CashTracker</h1>
         {children}
       </body>
     </html>
