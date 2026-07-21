@@ -1,8 +1,40 @@
 "use client";
 
+import { Register } from "@/actions/create-account-action";
+import { useFormState } from "react-dom";
+import ErrorMessage from "../ui/ErrorMessage";
+import SuccessMessage from "../ui/SuccessMessage";
+import { useEffect, useRef } from "react";
+
+const initialState = {
+  success: '',
+  errors: [],
+  serverError: ''
+};
+
 export default function RegisterForm() {
+  const [state, dispatch] = useFormState(Register, initialState);
+  const ref = useRef<HTMLFormElement>(null);
+
+  useEffect(()=> {
+    if(state.success) {
+      ref.current?.reset()
+    }
+  }, [state])
+  
+  console.log("Estado del fomrulario", state);
+
   return (
-    <form className="mt-14 space-y-5" noValidate>
+    <form 
+    ref={ref}
+    className="mt-14 space-y-5" 
+    noValidate action={dispatch}>
+      {/* SI HAY ERRORES DE VALIDACION DE ZOD */}
+      {state.errors.map((error) => (
+        <ErrorMessage>{error}</ErrorMessage>
+      ))}
+      {state.success && <SuccessMessage>{state.success}</SuccessMessage>}
+      {state.serverError && <ErrorMessage>{state.serverError}</ErrorMessage>}
       <div className="flex flex-col gap-2">
         <label className="font-bold text-2xl" htmlFor="email">
           Email

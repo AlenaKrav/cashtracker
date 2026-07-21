@@ -10,7 +10,6 @@ export const metadata: Metadata = {
 };
 
 export default function LoginPage() {
-  console.log("Register form");
   return (
     <>
       <h1 className="font-black text-6xl text-purple-950">Inicia la sesión</h1>

@@ -31,5 +31,5 @@ app.use('/api/auth', authRouter)
 app.use('/', (req, res) => {
   res.send('TODO OK')
 })
-console.log(process.env.NODE_ENV)
+// console.log(process.env.NODE_ENV)
 export default app;

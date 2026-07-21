@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: "CashTracker - Olvidé mi contraseña",
 };
 
-export default function ForgorPasswordPage() {
+export default function ForgotPasswordPage() {
   return (
     <>
       <h1 className="font-black text-6xl text-purple-950">

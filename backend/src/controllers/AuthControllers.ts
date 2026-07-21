@@ -119,6 +119,7 @@ export class AuthController {
     //   email: existingUser.email,
     //   token: existingUser.token,
     // });
+
     res.status(200).json({
       message:
         "Revisa tu email con las instrucciones para restablecer tu contraseña",

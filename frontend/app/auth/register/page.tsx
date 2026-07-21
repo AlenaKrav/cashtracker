@@ -9,7 +9,6 @@ export const metadata: Metadata = {
 };
 
 export default function RegisterPage() {
-  console.log("Register form");
   return (
     <>
       <h1 className="font-black text-6xl text-purple-950">Crea una cuenta</h1>
