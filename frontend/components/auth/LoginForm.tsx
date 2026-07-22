@@ -1,9 +1,35 @@
 "use client";
 
+import { Authenticate } from "@/actions/authenticate-user-actio";
+import { useEffect } from "react";
+import { useFormState } from "react-dom";
+import { toast } from "react-toastify";
+import ErrorMessage from "../ui/ErrorMessage";
+
+const initialState = {
+  success: "",
+  errors: [],
+  serverError: "",
+};
+
 export default function LoginForm() {
+  const [state, dispatch] = useFormState(Authenticate, initialState);
+
+  useEffect(() => {
+    if (state.serverError) {
+      toast.error(state.serverError);
+    }
+    if (state.success) {
+      toast.success(state.success);
+    }
+  }, [state]);
+
   return (
     <>
-      <form className="mt-14 space-y-5" noValidate>
+      <form className="mt-14 space-y-5" noValidate action={dispatch}>
+        {state.errors.map((error) => (
+          <ErrorMessage>{error}</ErrorMessage>
+        ))}
         <div className="flex flex-col gap-2">
           <label className="font-bold text-2xl">Email</label>
 

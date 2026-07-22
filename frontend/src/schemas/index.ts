@@ -25,4 +25,18 @@ export const RegisterSchema = z
     error: z.string().min(1, {message: 'Valor devuelto por el servidor no es válido'})
   });
 
-  export const TokenSchema = z.string({message: 'Token no valido'}).length(6,{message: 'Token no valido'})
+  export const TokenSchema = z.string({message: 'Token no valido'}).length(6,{message: 'Token no valido'});
+
+  export const LoginSchema = z.object({
+    email: z.string()
+            .min(1, {message: 'El email es obligatorio'})
+            .pipe(z.email('Email no válido')),
+    password: z
+      .string()
+      .min(1, { error: "El password es obligatorio" }),
+  });
+
+  export const SuccessLoginSchema = z.object({
+    message: z.string().min(1, {message: 'Valor devuelto por el servidor no es válido'}),
+    token: z.string().min(1, {message: 'Valor devuelto por el servidor no es válido'}),
+  })
