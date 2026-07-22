@@ -3,8 +3,9 @@
 import { Register } from "@/actions/create-account-action";
 import { useFormState } from "react-dom";
 import ErrorMessage from "../ui/ErrorMessage";
-import SuccessMessage from "../ui/SuccessMessage";
 import { useEffect, useRef } from "react";
+import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 const initialState = {
   success: '',
@@ -18,7 +19,11 @@ export default function RegisterForm() {
 
   useEffect(()=> {
     if(state.success) {
+      toast.success(state.success)
       ref.current?.reset()
+    }
+  if (state.serverError) {
+        toast.error(state.serverError)
     }
   }, [state])
   
@@ -33,8 +38,6 @@ export default function RegisterForm() {
       {state.errors.map((error) => (
         <ErrorMessage>{error}</ErrorMessage>
       ))}
-      {state.success && <SuccessMessage>{state.success}</SuccessMessage>}
-      {state.serverError && <ErrorMessage>{state.serverError}</ErrorMessage>}
       <div className="flex flex-col gap-2">
         <label className="font-bold text-2xl" htmlFor="email">
           Email

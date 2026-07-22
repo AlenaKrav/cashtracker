@@ -24,3 +24,5 @@ export const RegisterSchema = z
    export const ErrorSchema = z.object({
     error: z.string().min(1, {message: 'Valor devuelto por el servidor no es válido'})
   });
+
+  export const TokenSchema = z.string({message: 'Token no valido'}).length(6,{message: 'Token no valido'})
