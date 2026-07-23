@@ -2,9 +2,9 @@
 
 import { ErrorSchema, LoginSchema, SuccessLoginSchema } from "@/src/schemas";
 import { cookies } from "next/headers";
+import {redirect } from 'next/navigation';
 
 type ActionStateType = {
-  success: string;
   serverError: string;
   errors: string[];
 };
@@ -25,7 +25,6 @@ export async function Authenticate(
   if (!validatedLogin.success) {
     const errors = validatedLogin.error.issues.map((error) => error.message);
     return {
-      success: "",
       errors,
       serverError: "",
     };
@@ -46,13 +45,12 @@ export async function Authenticate(
 
   //ESTO ES LO QUE NOS DEVUELVE EL SERVER (MENSAJE DE SUCCES O CON EL ERROR)
   const json = await request.json();
-  console.log("JSON DEL LOGIN REQUEST", json);
+  // console.log("JSON DEL LOGIN REQUEST", json);
 
   if (!request.ok || json.error) {
     const error = ErrorSchema.parse(json);
     console.log("ESTE ES UN MENSAJE DE ERROR", error.error);
     return {
-      success: "",
       errors: [],
       serverError: error.error,
     };
@@ -66,12 +64,6 @@ export async function Authenticate(
     path: "/",
   });
 
-  const success = SuccessLoginSchema.parse(json);
-  console.log("ESTE ES UN SUCCESS", success.message);
+  redirect('/admin'); //despues de esto ya no es necesario devolver el mensaje de exito
 
-  return {
-    success: success.message,
-    errors: [],
-    serverError: "",
-  };
 }

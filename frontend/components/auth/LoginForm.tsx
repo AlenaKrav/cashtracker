@@ -1,13 +1,12 @@
 "use client";
 
-import { Authenticate } from "@/actions/authenticate-user-actio";
+import { Authenticate } from "@/actions/authenticate-user-action";
 import { useEffect } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
 import ErrorMessage from "../ui/ErrorMessage";
 
 const initialState = {
-  success: "",
   errors: [],
   serverError: "",
 };
@@ -18,9 +17,6 @@ export default function LoginForm() {
   useEffect(() => {
     if (state.serverError) {
       toast.error(state.serverError);
-    }
-    if (state.success) {
-      toast.success(state.success);
     }
   }, [state]);
 
