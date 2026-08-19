@@ -32,6 +32,6 @@ export class AuthEmail{
                 <a href="${process.env.FRONTEND_URL}/auth/new-password">Restablecer mi contraseña</a>
                 <p>e igresa este código: <b>${user.token}</b></p>`
         })
-        // console.log('Mensaje enviado: ', email.messageId)
+        console.log('Mensaje enviado: ', email.messageId)
     }
 }

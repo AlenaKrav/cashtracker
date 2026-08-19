@@ -56,4 +56,12 @@ export const authenticatedUser = z.object({
   email: z.string().pipe(z.email()),
 });
 
-export type User = z.infer<typeof authenticatedUser>
+export type User = z.infer<typeof authenticatedUser>;
+
+
+export const ForgotPasswordSchema = z.object({
+  email: z
+      .string()
+      .min(1, { message: "El email es obligatorio" })
+      .pipe(z.email("Email no válido")),
+});

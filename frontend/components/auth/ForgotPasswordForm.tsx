@@ -1,10 +1,42 @@
 "use client";
 
+import { ForgotPassword } from "@/actions/forgot-password-action";
+import { useEffect, useRef } from "react";
+import { useFormState } from "react-dom";
+import { toast } from "react-toastify";
+
+
+const initialState = {
+  success: '',
+  errors: [],
+  serverError: ''
+};
+
 export default function ForgotPasswordForm() {
+    const [state, dispatch] = useFormState(ForgotPassword, initialState);
+    const ref = useRef<HTMLFormElement>(null);
+
+  useEffect(() => {
+    if (state.errors) {
+      state.errors.forEach((error) => {
+        toast.error(error);
+      });
+    }
+    if (state.success) {
+      toast.success(state.success);
+      ref.current?.reset();
+    }
+    if (state.serverError) {
+      toast.error(state.serverError);
+    }
+  }, [state]);
+
     return (
         <form 
+            ref={ref}
             className=" mt-14 space-y-5"
             noValidate
+            action={dispatch}
         >
             <div className="flex flex-col gap-2 mb-10">
                 <label
