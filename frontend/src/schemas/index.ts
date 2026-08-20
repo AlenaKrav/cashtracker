@@ -65,3 +65,15 @@ export const ForgotPasswordSchema = z.object({
       .min(1, { message: "El email es obligatorio" })
       .pipe(z.email("Email no válido")),
 });
+
+export const ResetPasswordSchema = z
+  .object({
+    password: z
+      .string()
+      .min(8, { error: "La contraseña debe tener 8 caracteres como mínimo" }),
+    password_confirmation: z.string(),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    error: "Las contraseñas deben coincidir",
+    path: ["password_confirmation"],
+  });

@@ -49,7 +49,6 @@ export async function ForgotPassword(
   const json = await request.json();
   console.log('JSON DEL REQUEST', json);
 
- 
 
   if(json.error){
     const error = ErrorSchema.parse(json);
@@ -61,7 +60,6 @@ export async function ForgotPassword(
     }
   }
 
-   
   const success = SuccessSchema.parse(json);
   console.log("ESTE ES UN SUCCESS", success.message);
 
