@@ -24,9 +24,7 @@ export default function RegisterForm() {
   if (state.serverError) {
         toast.error(state.serverError)
     }
-  }, [state])
-  
-  console.log("Estado del fomrulario", state);
+  }, [state]);
 
   return (
     <form 

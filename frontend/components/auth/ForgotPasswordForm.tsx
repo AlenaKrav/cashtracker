@@ -4,6 +4,7 @@ import { ForgotPassword } from "@/actions/forgot-password-action";
 import { useEffect, useRef } from "react";
 import { useFormState } from "react-dom";
 import { toast } from "react-toastify";
+import { useRouter } from "next/navigation";
 
 
 const initialState = {
@@ -13,6 +14,7 @@ const initialState = {
 };
 
 export default function ForgotPasswordForm() {
+    const router = useRouter();
     const [state, dispatch] = useFormState(ForgotPassword, initialState);
     const ref = useRef<HTMLFormElement>(null);
 
@@ -23,8 +25,13 @@ export default function ForgotPasswordForm() {
       });
     }
     if (state.success) {
-      toast.success(state.success);
       ref.current?.reset();
+      toast.success(state.success, {
+        onClose: () => {
+          router.push("/auth/new-password");
+        },
+      });
+      
     }
     if (state.serverError) {
       toast.error(state.serverError);

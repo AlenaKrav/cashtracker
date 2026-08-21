@@ -58,12 +58,11 @@ export const authenticatedUser = z.object({
 
 export type User = z.infer<typeof authenticatedUser>;
 
-
 export const ForgotPasswordSchema = z.object({
   email: z
-      .string()
-      .min(1, { message: "El email es obligatorio" })
-      .pipe(z.email("Email no válido")),
+    .string()
+    .min(1, { message: "El email es obligatorio" })
+    .pipe(z.email("Email no válido")),
 });
 
 export const ResetPasswordSchema = z
@@ -77,3 +76,12 @@ export const ResetPasswordSchema = z
     error: "Las contraseñas deben coincidir",
     path: ["password_confirmation"],
   });
+
+export const CreateBudgetSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "El nombre de presupuesto es obligatorio" }),
+  amount: z.coerce //nos permite convertir un string a number
+    .number({ message: "Cantidad no válida" })
+    .min(1, { message: "Cantidad no válida" }),
+});

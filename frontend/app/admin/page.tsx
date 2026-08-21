@@ -1,9 +1,12 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
+export const metadata: Metadata = {
+  title: 'CashTracker - Panel de administración',
+  description: 'CashTracker - Panel de administración'
+}
+
 export default async function AdminPage() { //como vamos a llamar una funcion asincrona convertimos este componente en asincrono
-
-
-
   return (
     <div className="flex flex-col-reverse md:flex-row md:justify-between items-center">
       <div className="w-full md:w-auto">
@@ -16,7 +19,7 @@ export default async function AdminPage() { //como vamos a llamar una funcion as
         </p>
       </div>
       <Link
-        href={"/admin/budget/new"}
+        href={"/admin/budgets/new"}
         className="bg-amber-500 p-2 rounded-lg text-white font-bold w-full md:w-auto text-center"
       >
         Crear Presupuesto
