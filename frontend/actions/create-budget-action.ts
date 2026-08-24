@@ -1,7 +1,7 @@
 "use server";
 
+import getToken from "@/src/auth/token";
 import { CreateBudgetSchema, ErrorSchema, SuccessSchema } from "@/src/schemas";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 
@@ -35,7 +35,7 @@ export async function createBudget(
     };
   }
 
-  const token = cookies().get("CASHTRACKER_TOKEN")?.value;
+  const token = getToken();
     if (!token) {
       redirect("auth/login");
     }

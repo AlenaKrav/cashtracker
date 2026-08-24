@@ -3,14 +3,14 @@ import "server-only"; //ya que no es una server action, y 'use server' no nos si
 // Data Access Layer = aqui revisamos si el user está autenticado
 // En este caso no es una server action simplemente es una funcion del servidor
 import { cache } from "react";
-import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { authenticatedUser } from "../schemas";
+import getToken from "./token";
 
 // ya que vamos a llamar verifySession en varias ocasiones y diferentes lugares
 // nos permite en vez de llamar la api para traer los datos, se reutilizarán si no han cambiado
 export const verifySession = cache (async () => {
-  const token = cookies().get("CASHTRACKER_TOKEN")?.value;
+  const token = getToken();
   if (!token) {
     redirect("auth/login");
   }

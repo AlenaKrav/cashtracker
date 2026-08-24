@@ -13,7 +13,7 @@ export class BudgetController {
       },
         order: [["createdAt", "DESC"]],
       });
-      res.json({ budgets });
+      res.json(budgets);
     } catch (error) {
       res
         .status(500)

@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { id } from "zod/locales";
 
 export const RegisterSchema = z
   .object({
@@ -85,3 +86,15 @@ export const CreateBudgetSchema = z.object({
     .number({ message: "Cantidad no válida" })
     .min(1, { message: "Cantidad no válida" }),
 });
+
+export const BudgetAPIResponseSchema = z.object({
+        id: z.number(),
+        name: z.string(),
+        amount: z.number(),
+        userId: z.number(),
+        createdAt: z.string(),
+        updatedAt: z.string()
+});
+
+export type Budget = z.infer<typeof BudgetAPIResponseSchema>
+export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema)
