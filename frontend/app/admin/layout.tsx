@@ -10,8 +10,7 @@ export default async function AdminLayout({
   children: React.ReactNode;
 }>) {
   const { user } = await verifySession(); //usamos aqui para comprobar si está autenticado NO PARA TRAER LA INFO DEL USER
-
-  console.log(user)
+  // console.log(user)
   return (
     <>
       <header className="bg-purple-950 py-5">
