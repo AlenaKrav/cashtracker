@@ -1,5 +1,4 @@
 import { z } from "zod";
-import { id } from "zod/locales";
 
 export const RegisterSchema = z
   .object({
@@ -97,4 +96,10 @@ export const BudgetAPIResponseSchema = z.object({
 });
 
 export type Budget = z.infer<typeof BudgetAPIResponseSchema>
-export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema)
+export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema);
+
+export const CheckPasswordSchema = z.object({
+  password: z
+      .string()
+      .min(8, { error: "La contraseña debe tener 8 caracteres como mínimo" })
+})

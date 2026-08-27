@@ -4,8 +4,11 @@ import Link from "next/link"
 import { Menu, MenuButton, MenuItem, MenuItems, Transition } from "@headlessui/react"
 import { EllipsisVerticalIcon } from "@heroicons/react/20/solid"
 import { Budget } from "@/src/schemas"
+import { useRouter } from "next/navigation"
 
 export default function BudgetMenu({budgetId} : {budgetId: Budget['id']}) {
+  //usamos el hook de userouter para colocar el parametro show necesario para el deleteModal
+  const router =  useRouter();
   return (
     <>
       <Menu as="div" className="relative flex-none">
@@ -44,7 +47,7 @@ export default function BudgetMenu({budgetId} : {budgetId: Budget['id']}) {
               <button
                 type='button'
                 className='block px-3 py-1 text-sm leading-6 text-red-500'
-                onClick={ () => {} }
+                onClick={ () => router.push(`?deleteBudgetId=${budgetId}`) }
               >
                 Eliminar Presupuesto
               </button>

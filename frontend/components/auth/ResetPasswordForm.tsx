@@ -26,11 +26,8 @@ export default function ResetPasswordForm({ token }: tokenType) {
       });
     }
     if (state.success) {
-      toast.success(state.success, {
-        onClose: () => {
-          router.push("/auth/login");
-        },
-      });
+      toast.success(state.success);
+      router.push("/auth/login");
     }
     if (state.serverError) {
       toast.error(state.serverError);

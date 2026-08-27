@@ -5,6 +5,7 @@ import { BudgetsAPIResponseSchema, ErrorSchema } from "@/src/schemas";
 import getToken from "@/src/auth/token";
 import { formatCurrency, formatDate } from "@/src/utils";
 import BudgetMenu from "@/components/budgets/BudgetMenu";
+import DeleteBudgetModal from "@/components/budgets/DeleteBudgetModal";
 
 export const metadata: Metadata = {
   title: "CashTracker - Panel de administración",
@@ -52,6 +53,7 @@ export default async function AdminPage() {
         </Link>
       </div>
       {userBugets.length ? (
+        <>
         <ul
           role="list"
           className="divide-y divide-gray-300 border shadow-lg mt-10 "
@@ -87,6 +89,8 @@ export default async function AdminPage() {
             </li>
           ))}
         </ul>
+        <DeleteBudgetModal />
+        </>
       ) : (
         <p className="text-center py-20">
           Todavía no has creado ningún presupuesto

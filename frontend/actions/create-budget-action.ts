@@ -2,6 +2,7 @@
 
 import getToken from "@/src/auth/token";
 import { CreateBudgetSchema, ErrorSchema, SuccessSchema } from "@/src/schemas";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 
@@ -54,6 +55,7 @@ export async function createBudget(
   });
 
   const json = await request.json();
+  revalidatePath('/admin')
   console.log(json)
 
 if(!request.ok || json.error){

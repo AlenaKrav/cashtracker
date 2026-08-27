@@ -26,11 +26,10 @@ export default function ForgotPasswordForm() {
     }
     if (state.success) {
       ref.current?.reset();
-      toast.success(state.success, {
-        onClose: () => {
-          router.push("/auth/new-password");
-        },
-      });
+    if (state.success) {
+      toast.success(state.success);
+      router.push("/auth/new-password");
+    }
       
     }
     if (state.serverError) {
