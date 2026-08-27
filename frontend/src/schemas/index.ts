@@ -86,6 +86,15 @@ export const CreateBudgetSchema = z.object({
     .min(1, { message: "Cantidad no válida" }),
 });
 
+export const CreateExpenseSchema = z.object({
+  name: z
+    .string()
+    .min(1, { message: "El nombre de gasto es obligatorio" }),
+  amount: z.coerce //nos permite convertir un string a number
+    .number({ message: "Cantidad no válida" })
+    .min(1, { message: "Cantidad no válida" }),
+});
+
 export const BudgetAPIResponseSchema = z.object({
         id: z.number(),
         name: z.string(),

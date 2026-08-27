@@ -38,9 +38,6 @@ export async function editBudget(
   }
 
   const token = getToken();
-  if (!token) {
-    redirect("auth/login");
-  }
 
   const url = `${process.env.API_URL}/budgets/${budgetId}`;
   const request = await fetch(url, {
@@ -56,7 +53,7 @@ export async function editBudget(
   });
 
   const json = await request.json();
-  console.log(json);
+  // console.log(json);
 
   if (!request.ok || json.error) {
     const error = ErrorSchema.parse(json);

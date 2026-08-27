@@ -44,9 +44,6 @@ export async function deleteBudget(
 
   //obtenemos el token
   const token = getToken();
-  if (!token) {
-    redirect("auth/login");
-  }
 
   //enviamos el request al backend para verificar el password
   const checkPasswordUrl = `${process.env.API_URL}/auth/check-password`;

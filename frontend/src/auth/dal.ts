@@ -11,9 +11,8 @@ import getToken from "./token";
 // nos permite en vez de llamar la api para traer los datos, se reutilizarán si no han cambiado
 export const verifySession = cache (async () => {
   const token = getToken();
-  if (!token) {
-    redirect("auth/login");
-  }
+
+  
 
   const url = `${process.env.API_URL}/auth/user`;
   const request = await fetch(url, {
