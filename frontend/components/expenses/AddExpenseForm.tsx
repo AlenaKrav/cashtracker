@@ -1,3 +1,5 @@
+"use client";
+
 import { DialogTitle } from "@headlessui/react";
 import ExpenseForm from "./ExpenseForm";
 import { useFormState } from "react-dom";

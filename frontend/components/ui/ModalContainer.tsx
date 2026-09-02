@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import {  Fragment } from 'react';
 import { useRouter, useSearchParams, usePathname } from 'next/navigation';
 import { Dialog, DialogPanel,  Transition, TransitionChild } from '@headlessui/react';
@@ -6,7 +6,7 @@ import AddExpenseForm from '../expenses/AddExpenseForm';
 import EditExpenseForm from '../expenses/EditExpenseForm';
 import DeleteExpenseForm from '../expenses/DeleteExpenseForm';
 
-
+// un diccionario en el que las propiedades cuyos valores son nombres de los componentes
 const componentMap = {
     "AddExpense": AddExpenseForm,
     "EditExpense": EditExpenseForm,
@@ -24,25 +24,35 @@ export default function ModalContainer() {
 
   //logica para mostrar el componente segun el parametro expense
   //obtenemos el addExpense desde searchParams
-  const addExpenseParam = searchParams.get('addExpense')
+  const addExpenseParam = searchParams.get('addExpense');
+  const editExpenseParam = searchParams.get('editExpenseId');
 
   //en funcion del parametro que nos viene en la url, devolvemos un nombre de componente u otro
   const getComponentName = () => {
-    if(addExpenseParam) return "AddExpense"
+    if(addExpenseParam) return "AddExpense";
+    if(editExpenseParam) return "EditExpense";
   }
 
-  //almacenamos el valor devuelto
+  //almacenamos el valor devuelto componentName === "AddExpense" por ejemplo
   const componentName = getComponentName();
   //si tenemos un nombre del componente lo buscamos en el mapa, sino devolvemos un null
+  //es simplemente una variable que contiene una referencia a un componente (que realmente es una funcion)
+  //react renderza el componente que esta variable almacena
   const ComponentToRender = componentName ? componentMap[componentName] : null
   
 
   const closeModal = () => {
-    const hideModal = new URLSearchParams(searchParams.toString());
+    const hideModal = new URLSearchParams(searchParams.toString()); // = ?showModal=true&addExpense=true
     Array.from(hideModal.entries()).forEach(([key]) => {
       hideModal.delete(key)
-    });
-    router.replace(`${pathname}?${hideModal}`)
+    }); /**
+    [
+  ["showModal", "true"],
+  ["addExpense", "true"]
+
+  después de esto hideModal = ""
+] */
+    router.replace(`${pathname}?${hideModal}`) // /admin/budgets
   }
 
   return (

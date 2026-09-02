@@ -27,7 +27,7 @@ export default function DeleteBudgetModal() {
    * URLSearchParams {
     deleteBudgetId → "13"
    */
-  console.log(hideModal)
+  // console.log(hideModal)
   hideModal.delete('deleteBudgetId') // aqui ya es ""
 
 

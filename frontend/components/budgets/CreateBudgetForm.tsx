@@ -15,7 +15,7 @@ const initialState = {
   serverError: "",
 };
 
-export default function CreateBudgetForm({budget}: {budget: Budget}) {
+export default function CreateBudgetForm() {
   const [state, dispatch] = useFormState(createBudget, initialState);
   const router = useRouter();
 
@@ -34,8 +34,7 @@ export default function CreateBudgetForm({budget}: {budget: Budget}) {
       {state.errors.map((error) => (
         <ErrorMessage key={error}>{error}</ErrorMessage>
       ))}
-      <BudgetForm 
-        budget={budget}
+      <BudgetForm
       />
       <input
         type="submit"

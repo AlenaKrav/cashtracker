@@ -56,6 +56,15 @@ export const authenticatedUser = z.object({
   email: z.string().pipe(z.email()),
 });
 
+export const ExpenseAPIResponseSchema = z.object({
+  id: z.number(),
+  name: z.string(),
+  amount: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  budgetId: z.number(),
+});
+
 export type User = z.infer<typeof authenticatedUser>;
 
 export const ForgotPasswordSchema = z.object({
@@ -87,28 +96,31 @@ export const CreateBudgetSchema = z.object({
 });
 
 export const CreateExpenseSchema = z.object({
-  name: z
-    .string()
-    .min(1, { message: "El nombre de gasto es obligatorio" }),
+  name: z.string().min(1, { message: "El nombre de gasto es obligatorio" }),
   amount: z.coerce //nos permite convertir un string a number
     .number({ message: "Cantidad no válida" })
     .min(1, { message: "Cantidad no válida" }),
 });
 
 export const BudgetAPIResponseSchema = z.object({
-        id: z.number(),
-        name: z.string(),
-        amount: z.number(),
-        userId: z.number(),
-        createdAt: z.string(),
-        updatedAt: z.string()
+  id: z.number(),
+  name: z.string(),
+  amount: z.number(),
+  userId: z.number(),
+  createdAt: z.string(),
+  updatedAt: z.string(),
+  expenses: z.array(ExpenseAPIResponseSchema)
 });
 
-export type Budget = z.infer<typeof BudgetAPIResponseSchema>
-export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema);
+export const BudgetsAPIResponseSchema = z.array(BudgetAPIResponseSchema.omit({expenses:true}));
 
 export const CheckPasswordSchema = z.object({
   password: z
-      .string()
-      .min(8, { error: "La contraseña debe tener 8 caracteres como mínimo" })
-})
+    .string()
+    .min(8, { error: "La contraseña debe tener 8 caracteres como mínimo" }),
+});
+
+
+export type Budget = z.infer<typeof BudgetAPIResponseSchema>;
+export type Expense = z.infer<typeof ExpenseAPIResponseSchema>;
+export type DraftExpense = z.infer<typeof CreateExpenseSchema>;

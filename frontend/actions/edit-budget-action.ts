@@ -3,7 +3,6 @@
 import getToken from "@/src/auth/token";
 import { CreateBudgetSchema, ErrorSchema, SuccessSchema } from "@/src/schemas";
 import { revalidatePath } from "next/cache";
-import { redirect } from "next/navigation";
 
 type ActionStateType = {
   success: string;
@@ -16,7 +15,7 @@ export async function editBudget(
   prevState: ActionStateType,
   formData: FormData,
 ) {
-  console.log(budgetId);
+  // console.log(budgetId);
 
   const editBudgetFormData = {
     name: formData.get("name"),

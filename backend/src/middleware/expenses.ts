@@ -78,3 +78,15 @@ export const validateExpenseExists = async (
       .json({ error: "Ha ocurrido un error al recuperar el gasto" });
   }
 };
+
+export const expenseBelongsToBudget = async (
+  req: Request<ExpenseParams>,
+  res: Response,
+  next: NextFunction,
+) => {
+  if (req.budget.id !== req.expense.budgetId) {
+    const error = new Error("Acción no válida");
+    return res.status(403).json({ error: error.message });
+  }
+  next();
+};

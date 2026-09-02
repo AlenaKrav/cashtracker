@@ -3,7 +3,7 @@ import { BudgetController } from "../controllers/BudgetController";
 import { handleInputErrors } from "../middleware/validation";
 import { validateBudgetExists, validateBudgetId, validateBudgetInput, validateBudgetOwner } from "../middleware/budget";
 import { ExpensesController } from "../controllers/ExpensesController";
-import { validateExpenseExists, validateExpenseId, validateExpensetInput } from "../middleware/expenses";
+import { expenseBelongsToBudget, validateExpenseExists, validateExpenseId, validateExpensetInput } from "../middleware/expenses";
 import { autenticateUser } from "../middleware/auth";
 
 const router = Router();
@@ -19,6 +19,7 @@ router.param('budgetId', validateBudgetOwner); // 4. Aqui necesitaremos tanto el
 
 router.param('expenseId', validateExpenseId)
 router.param('expenseId', validateExpenseExists)
+router.param('expenseId', expenseBelongsToBudget)
 
 router.get('/', BudgetController.getAllBudgets)
 

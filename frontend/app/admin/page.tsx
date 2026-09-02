@@ -1,7 +1,7 @@
 import { Metadata } from "next";
 import Link from "next/link";
 import { cookies } from "next/headers";
-import { BudgetsAPIResponseSchema, ErrorSchema } from "@/src/schemas";
+import { BudgetsAPIResponseSchema } from "@/src/schemas";
 import getToken from "@/src/auth/token";
 import { formatCurrency, formatDate } from "@/src/utils";
 import BudgetMenu from "@/components/budgets/BudgetMenu";
@@ -23,7 +23,7 @@ async function getUserBusdgets() {
   });
 
   const json = await request.json();
-  // console.log(json);
+  // console.log('Desde admin page', json);
   const budgets = BudgetsAPIResponseSchema.parse(json);
   return budgets;
 }
