@@ -90,9 +90,11 @@ export async function deleteBudget(
     };
   }
 
-  revalidatePath('/admin')
+  
   const success = SuccessSchema.parse(delteBudgetJson);
+  revalidatePath('/admin')
 
+  
   return {
     success: success.message,
     errors: [],

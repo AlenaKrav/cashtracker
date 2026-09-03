@@ -26,6 +26,7 @@ export default function EditExpenseForm({ closeModal }: { closeModal: () => void
   const [state, dispatch] = useFormState(editExpenseWithIds, initialState)
   const [expense, setExpense] = useState<DraftExpense>();
   
+  //cuando el componente se monta se hace el fetch y se pasa el data hacia el componente hijo
   useEffect(() => {
     //nos conectamos con la rest API de express
     const url = `${process.env.NEXT_PUBLIC_URL}/admin/api/budgets/${budgetId}/expenses/${expenseId}`

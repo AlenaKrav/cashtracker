@@ -26,11 +26,13 @@ export default function ModalContainer() {
   //obtenemos el addExpense desde searchParams
   const addExpenseParam = searchParams.get('addExpense');
   const editExpenseParam = searchParams.get('editExpenseId');
+  const deleteExpenseParam = searchParams.get('deleteExpenseId')
 
   //en funcion del parametro que nos viene en la url, devolvemos un nombre de componente u otro
   const getComponentName = () => {
     if(addExpenseParam) return "AddExpense";
     if(editExpenseParam) return "EditExpense";
+    if(deleteExpenseParam) return "DeleteExpense";
   }
 
   //almacenamos el valor devuelto componentName === "AddExpense" por ejemplo
@@ -52,7 +54,7 @@ export default function ModalContainer() {
 
   después de esto hideModal = ""
 ] */
-    router.replace(`${pathname}?${hideModal}`) // /admin/budgets
+    router.replace(`${pathname}?${hideModal}`) // despues queda en /admin/budgets
   }
 
   return (
