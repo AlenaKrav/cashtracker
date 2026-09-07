@@ -23,10 +23,10 @@ export class AuthController {
       //estamos montando una futura fila de la tabla y luego se modifica el passw, se genera el token
       const user = await User.create(req.body);
       user.password = await hashPassword(password);
-      const token =  generateToken();
+      const token = generateToken();
       user.token = token;
 
-      if(process.env.NODE_ENV !== 'production'){
+      if (process.env.NODE_ENV !== "production") {
         globalThis.cashTrackerConfirmationToken = token;
       }
 
@@ -111,7 +111,6 @@ export class AuthController {
 
     existingUser.token = generateToken();
     await existingUser.save();
-
 
     // gestionamos el envio de mail
     // await AuthEmail.sendPasswordResetToken({
@@ -208,5 +207,27 @@ export class AuthController {
       return res.status(401).json({ error: error.message });
     }
     res.status(200).json({ message: "Contraseña correcta" });
+  };
+
+  static updateProfile = async (req: Request, res: Response) => {
+    const exisitingUser = req.user;
+    const { name, email } = req.body;
+
+    const isExisitingUserEmail = await User.findOne({
+      where: {
+        email,
+      },
+    });
+
+    if (isExisitingUserEmail) {
+      const error = new Error("Este correo ya está registrado");
+      return res.status(409).json({ error: error.message });
+    }
+
+    await exisitingUser.update(req.body);
+
+    res
+      .status(200)
+      .json({ message: "Perfil se actualizado correctamente" });
   };
 }

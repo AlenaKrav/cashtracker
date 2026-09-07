@@ -99,4 +99,14 @@ router.post("/check-password",
     AuthController.checkPassword
 )
 
+//endpoint para cambiar la info del perfil
+router.put("/user",
+  autenticateUser,
+  body("name").notEmpty().withMessage("Debes introducir el nombre de usuario"),
+  body("email").isEmail().withMessage("E-mail no válido"),
+  handleInputErrors,
+  AuthController.updateProfile
+)
+
+
 export default router;
