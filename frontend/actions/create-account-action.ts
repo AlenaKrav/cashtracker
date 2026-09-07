@@ -22,7 +22,7 @@ export async function Register(
 
   // validar
   const validatedRegister = RegisterSchema.safeParse(registerFormData);
-  console.log("RESULTADO VALIDACIÓN DE CAMPOS DEL FORM", validatedRegister);
+  // console.log("RESULTADO VALIDACIÓN DE CAMPOS DEL FORM", validatedRegister);
 
 
   if (!validatedRegister.success) {
@@ -50,13 +50,13 @@ export async function Register(
 
   //ESTO ES LO QUE NOS DEVUELVE EL SERVER (MENSAJE DE SUCCES O CON EL ERROR)
   const json = await request.json();
-  console.log('JSON DEL REQUEST', json);
+  // console.log('JSON DEL REQUEST', json);
 
  
 
   if(json.error){
     const error = ErrorSchema.parse(json);
-    console.log("ESTE ES UN MENSAJE DE ERROR", error.error);
+    // console.log("ESTE ES UN MENSAJE DE ERROR", error.error);
     return {
       success: "",
       errors: [],
@@ -66,7 +66,7 @@ export async function Register(
 
    
   const success = SuccessSchema.parse(json);
-  console.log("ESTE ES UN SUCCESS", success.message);
+  // console.log("ESTE ES UN SUCCESS", success.message);
 
   return {
     success: success.message,

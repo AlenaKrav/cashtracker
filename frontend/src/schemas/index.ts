@@ -120,6 +120,21 @@ export const CheckPasswordSchema = z.object({
     .min(8, { error: "La contraseña debe tener 8 caracteres como mínimo" }),
 });
 
+export const ChangePasswordSchema = z
+  .object({
+    current_password: z
+      .string()
+      .min(1, { error: "La contraseña no puede ir vacía" }),
+    password: z
+      .string()
+      .min(8, { error: "La nueva contraseña debe tener 8 caracteres como mínimo" }),
+    password_confirmation: z.string(),
+  })
+  .refine((data) => data.password === data.password_confirmation, {
+    error: "Las contraseñas deben coincidir",
+    path: ["password_confirmation"],
+  });
+
 
 export type Budget = z.infer<typeof BudgetAPIResponseSchema>;
 export type Expense = z.infer<typeof ExpenseAPIResponseSchema>;

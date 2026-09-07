@@ -20,7 +20,7 @@ export async function Authenticate(
 
   // validar
   const validatedLogin = LoginSchema.safeParse(LoginFormData);
-  console.log("RESULTADO VALIDACIÓN DE CAMPOS DEL FORM", validatedLogin);
+  // console.log("RESULTADO VALIDACIÓN DE CAMPOS DEL FORM", validatedLogin);
 
   if (!validatedLogin.success) {
     const errors = validatedLogin.error.issues.map((error) => error.message);
@@ -49,7 +49,7 @@ export async function Authenticate(
 
   if (!request.ok || json.error) {
     const error = ErrorSchema.parse(json);
-    console.log("ESTE ES UN MENSAJE DE ERROR", error.error);
+    // console.log("ESTE ES UN MENSAJE DE ERROR", error.error);
     return {
       errors: [],
       serverError: error.error,
