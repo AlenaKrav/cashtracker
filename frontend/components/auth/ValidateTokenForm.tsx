@@ -35,7 +35,7 @@ export default function ValidateTokenForm({setIsValidToken, token, setToken}: Va
     if (state.serverError) {
       toast.error(state.serverError);
     }
-  }, [state]);
+  }, [state, setIsValidToken]);
   
 
 
@@ -43,7 +43,7 @@ export default function ValidateTokenForm({setIsValidToken, token, setToken}: Va
     if(isComplete){
         dispatch()
     }
-  }, [isComplete])
+  }, [isComplete, dispatch])
 
   const handleChange = (token: string) => {
     setIsComplete(false);

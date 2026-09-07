@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import RegisterForm from "@/components/auth/RegisterForm";
 import LoginForm from "@/components/auth/LoginForm";
 import Link from "next/link";
 

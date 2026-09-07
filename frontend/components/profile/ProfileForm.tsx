@@ -2,7 +2,6 @@
 
 import { updateUserProfile } from "@/actions/update-user-profile";
 import { User } from "@/src/schemas";
-import { useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { useFormState } from "react-dom"
 import { toast } from "react-toastify";
@@ -16,7 +15,6 @@ const initialState = {
 
 export default function ProfileForm({user} : {user: User}) {
   const [state, dispatch] = useFormState(updateUserProfile, initialState);
-  const router = useRouter();
 
     useEffect(() => {
       if (state.errors) {
@@ -26,7 +24,6 @@ export default function ProfileForm({user} : {user: User}) {
       }
       if (state.success) {
         toast.success(state.success);
-        // router.push("/auth/login");
       }
       if (state.serverError) {
         toast.error(state.serverError);

@@ -1,6 +1,4 @@
 import PasswordResetHandler from "@/components/auth/PasswordResetHandler";
-import ResetPasswordForm from "@/components/auth/ResetPasswordForm";
-import ValidateTokenForm from "@/components/auth/ValidateTokenForm";
 
 export default function NewPasswordPage() {
   return (

@@ -1,6 +1,5 @@
 import { Metadata } from "next";
 import Link from "next/link";
-import { cookies } from "next/headers";
 import { BudgetsAPIResponseSchema } from "@/src/schemas";
 import getToken from "@/src/auth/token";
 import { formatCurrency, formatDate } from "@/src/utils";

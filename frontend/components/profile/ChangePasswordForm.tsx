@@ -30,7 +30,7 @@ export default function ChangePasswordForm() {
     if (state.serverError) {
       toast.error(state.serverError);
     }
-  }, [state]);
+  }, [state, router]);
 
   return (
     <>

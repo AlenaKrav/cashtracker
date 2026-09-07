@@ -24,7 +24,7 @@ export default function LoginForm() {
     <>
       <form className="mt-14 space-y-5" noValidate action={dispatch}>
         {state.errors.map((error) => (
-          <ErrorMessage>{error}</ErrorMessage>
+          <ErrorMessage key={error}>{error}</ErrorMessage>
         ))}
         <div className="flex flex-col gap-2">
           <label className="font-bold text-2xl">Email</label>

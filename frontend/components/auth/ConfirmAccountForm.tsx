@@ -28,7 +28,7 @@ export default function ConfirmAccountForm() {
     if (isComplete) {
       dispatch();
     }
-  }, [isComplete]);
+  }, [isComplete, dispatch]);
 
   useEffect(() => {
     if (state.serverError) {
@@ -41,7 +41,7 @@ export default function ConfirmAccountForm() {
         },
       });
     }
-  }, [state]);
+  }, [state, router]);
 
   //Puede ocurrir que handleChange reciba los 6 digitos pero handleComplete no, ya que React no actualiza el token inmediatamente
   const handleChange = (token: string) => {
@@ -60,7 +60,7 @@ export default function ConfirmAccountForm() {
   return (
     <>
       {state.errors.map((error) => (
-        <ErrorMessage>{error}</ErrorMessage>
+        <ErrorMessage key={error}>{error}</ErrorMessage>
       ))}
       <div className="flex justify-center gap-5 my-10">
         <PinInput

@@ -31,7 +31,7 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
     if(!Number.isInteger(+budgetId) || !Number.isInteger(+expenseId)){
       closeModal();
     }
-  }, [])
+  }, [budgetId, expenseId, closeModal])
 
   useEffect(() => {
     if (state.success) {
@@ -41,7 +41,7 @@ export default function DeleteExpenseForm({ closeModal }: DeleteExpenseForm) {
     if (state.serverError) {
       toast.error(state.serverError);
     }
-  }, [state]);
+  }, [state, closeModal]);
 
   return (
     <>

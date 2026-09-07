@@ -7,7 +7,6 @@ import { useEffect } from "react";
 import { toast } from "react-toastify";
 import { useRouter } from "next/navigation";
 import BudgetForm from "./BudgetForm";
-import { Budget } from "@/src/schemas";
 
 const initialState = {
   success: "",

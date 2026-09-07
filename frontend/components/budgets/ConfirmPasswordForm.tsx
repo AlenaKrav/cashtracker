@@ -44,7 +44,7 @@ export default function ConfirmPasswordForm() {
     if (state.serverError) {
       toast.error(state.serverError);
     }
-  }, [state]);
+  }, [state, closeModal]);
 
   return (
     <>

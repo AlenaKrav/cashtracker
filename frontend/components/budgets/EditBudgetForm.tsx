@@ -29,7 +29,7 @@ export default function EditBudgetForm({budget}: {budget: Budget}) {
       if (state.serverError) {
         toast.error(state.serverError);
       }
-    }, [state]);
+    }, [state, router]);
 
 
   return (

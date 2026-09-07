@@ -34,7 +34,7 @@ export default function AddExpenseForm({closeModal} : {closeModal :() => void}) 
       if (state.serverError) {
         toast.error(state.serverError);
       }
-    }, [state]);
+    }, [state, closeModal]);
 
 
 

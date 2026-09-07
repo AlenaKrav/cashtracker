@@ -33,7 +33,7 @@ export default function RegisterForm() {
     noValidate action={dispatch}>
       {/* SI HAY ERRORES DE VALIDACION DE ZOD */}
       {state.errors.map((error) => (
-        <ErrorMessage>{error}</ErrorMessage>
+        <ErrorMessage key={error}>{error}</ErrorMessage>
       ))}
       <div className="flex flex-col gap-2">
         <label className="font-bold text-2xl" htmlFor="email">

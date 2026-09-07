@@ -32,7 +32,7 @@ export default function ResetPasswordForm({ token }: tokenType) {
     if (state.serverError) {
       toast.error(state.serverError);
     }
-  }, [state]);
+  }, [state, router]);
 
   return (
     <form className=" mt-14 space-y-5" noValidate action={dispatch}>
