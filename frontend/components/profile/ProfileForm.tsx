@@ -1,11 +1,43 @@
 "use client"
 
-export default function ProfileForm() {
+import { updateUserProfile } from "@/actions/update-user-profile";
+import { User } from "@/src/schemas";
+import { useRouter } from "next/navigation";
+import { useEffect } from "react";
+import { useFormState } from "react-dom"
+import { toast } from "react-toastify";
+
+const initialState = {
+  success: "",
+  errors: [],
+  serverError: "",
+};
+
+
+export default function ProfileForm({user} : {user: User}) {
+  const [state, dispatch] = useFormState(updateUserProfile, initialState);
+  const router = useRouter();
+
+    useEffect(() => {
+      if (state.errors) {
+        state.errors.forEach((error) => {
+          toast.error(error);
+        });
+      }
+      if (state.success) {
+        toast.success(state.success);
+        // router.push("/auth/login");
+      }
+      if (state.serverError) {
+        toast.error(state.serverError);
+      }
+    }, [state]);
   return (
     <>
       <form
         className=" mt-14 space-y-5"
         noValidate
+        action = {dispatch}
       >
         <div className="flex flex-col gap-5">
           <label
@@ -16,6 +48,7 @@ export default function ProfileForm() {
             placeholder="Tu Nombre"
             className="w-full border border-gray-300 p-3 rounded-lg"
             name="name"
+            defaultValue={user.name}
           />
         </div>
         <div className="flex flex-col gap-5">
@@ -29,6 +62,7 @@ export default function ProfileForm() {
             placeholder="Tu Email"
             className="w-full border border-gray-300 p-3 rounded-lg"
             name="email"
+            defaultValue={user.email}
           />
         </div>
 

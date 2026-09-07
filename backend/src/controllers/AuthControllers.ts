@@ -210,24 +210,33 @@ export class AuthController {
   };
 
   static updateProfile = async (req: Request, res: Response) => {
-    const exisitingUser = req.user;
     const { name, email } = req.body;
 
-    const isExisitingUserEmail = await User.findOne({
-      where: {
-        email,
-      },
-    });
+    try {
+      const existingUser = await User.findOne({
+        where: {
+          email,
+        },
+      });
 
-    if (isExisitingUserEmail) {
-      const error = new Error("Este correo ya está registrado");
-      return res.status(409).json({ error: error.message });
+      if (existingUser && existingUser.id !== req.user.id) {
+        const error = new Error(
+          "Este correo ya está registrado por otro usuario",
+        );
+        return res.status(409).json({ error: error.message });
+      }
+      await User.update(
+        { name, email },
+        {
+          where: {
+            id: req.user.id,
+          },
+        },
+      );
+
+      res.status(200).json({ message: "Perfil se actualizado correctamente" });
+    } catch (error) {
+      res.status(500).json({ error: "Ha ocurrido un error" });
     }
-
-    await exisitingUser.update(req.body);
-
-    res
-      .status(200)
-      .json({ message: "Perfil se actualizado correctamente" });
   };
 }

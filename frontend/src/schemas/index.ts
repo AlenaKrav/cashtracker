@@ -135,6 +135,15 @@ export const ChangePasswordSchema = z
     path: ["password_confirmation"],
   });
 
+  export const updateUsersProfileSchema = z.object({
+    name: z.string().min(1, { error: "El nombre es obligatorio" }),
+    email: z
+      .string()
+      .min(1, { message: "El email es obligatorio" })
+      .pipe(z.email("Email no válido")),
+    
+  });
+
 
 export type Budget = z.infer<typeof BudgetAPIResponseSchema>;
 export type Expense = z.infer<typeof ExpenseAPIResponseSchema>;
